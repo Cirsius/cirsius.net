@@ -77,12 +77,54 @@ const html = (content) => `<!doctype html>
 
     .contact-item { display: flex; gap: 15px; }
     .contact-label { min-width: 80px; }
+
+        #ascii-bg {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      z-index: -1;
+      font-size: 5px;
+      line-height: 5px;
+      color: #ffb3c6;
+      opacity: 0.4;
+      white-space: pre;
+      pointer-events: none;
+    }
+
   </style>
 </head>
 <body>
+  <div id="ascii-bg"></div>
   <div class="container">
     ${content}
   </div>
+  <script>
+    fetch('/api/neko').then(r => r.json()).then(data => {
+      if (!data[0]?.url) return
+      const img = new Image()
+      img.crossOrigin = 'anonymous'
+      img.onload = () => {
+        const c = document.createElement('canvas')
+        const ctx = c.getContext('2d')
+        const w = 120, h = Math.floor(120 * img.height / img.width * 0.5)
+        c.width = w; c.height = h
+        ctx.drawImage(img, 0, 0, w, h)
+        const px = ctx.getImageData(0, 0, w, h).data
+        const chars = ' .:-=+*#%@'
+        let out = ''
+        for (let y = 0; y < h; y++) {
+          for (let x = 0; x < w; x++) {
+            const i = (y * w + x) * 4
+            const b = (px[i] + px[i+1] + px[i+2]) / 3
+            out += chars[Math.floor(b / 255 * (chars.length - 1))]
+          }
+          out += '\\n'
+        }
+        document.getElementById('ascii-bg').textContent = out
+      }
+      img.src = data[0].url
+    }).catch(() => {})
+  </script>
 </body>
 </html>`
 const aboutContent = `
@@ -152,25 +194,32 @@ const homeContent = `
 `
 
 app.get('/', (c) => {
-    return c.html(html(homeContent))
+  return c.html(html(homeContent))
 })
 
 app.get('/about', (c) => {
-    return c.html(aboutContent)
+  return c.html(aboutContent)
 })
 
 app.get('/projects', (c) => {
-    return c.html(projectsContent)
+  return c.html(projectsContent)
 })
 
 app.get('/contact', (c) => {
-    return c.html(contactContent)
+  return c.html(contactContent)
+})
+
+app.get('/api/neko', async (c) => {
+  try {
+    const res = await fetch('https://api.nekosapi.com/v4/images/random?rating=safe&limit=1')
+    return c.json(await res.json())
+  } catch { return c.json([]) }
 })
 
 const port = 8008
 console.log(`running on http://localhost:${port}`)
 
 export default {
-    port,
-    fetch: app.fetch
+  port,
+  fetch: app.fetch
 }
