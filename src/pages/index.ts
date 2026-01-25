@@ -1,3 +1,1 @@
-export * from "./content";
-export * from "./layout";
-export * from "./styles";
+export { Home, About, Projects, Contact } from "./components";

@@ -1,9 +1,11 @@
 {
   "scripts": {
-    "start": "bun src/index.ts"
+    "start": "bun src/index.tsx"
   },
   "dependencies": {
-    "hono": "^4.6.0"
+    "hono": "^4.6.0",
+    "preact": "^10.16.0",
+    "preact-render-to-string": "^6.0.0"
   },
   "devDependencies": {
     "@types/bun": "latest"
