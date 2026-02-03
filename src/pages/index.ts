@@ -1,1 +1,1 @@
-export { Home, About, Projects, Contact } from "./components";
+export { Home, About, Projects, Contact, Status } from "./components"

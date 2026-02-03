@@ -125,6 +125,156 @@ a:hover { color: #fff; }
   white-space: pre;
   pointer-events: none;
 }
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #888;
+  text-decoration: none;
+}
+
+.back-link:hover { color: #ffb3c6; }
+
+.status-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.status-indicator-wrapper { position: relative; }
+
+.status-indicator {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.status-indicator.online { background: #4ade80; }
+.status-indicator.offline { background: #f87171; }
+
+.status-text {
+  font-weight: bold;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.status-text.online { color: #4ade80; }
+.status-text.offline { color: #f87171; }
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.stat-item { flex: 1; }
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.stat-label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #888;
+}
+
+.stat-value {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.stat-value.cpu { color: #fb923c; }
+.stat-value.ram { color: #facc15; }
+
+.progress-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.progress-fill.cpu { background: #fb923c; }
+.progress-fill.ram { background: #facc15; }
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.stat-card-label {
+  font-size: 11px;
+  font-weight: bold;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.stat-card-value {
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.uptime-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.uptime-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.uptime-icon { fill: #888; }
+
+.uptime-label {
+  font-size: 11px;
+  font-weight: bold;
+  color: #888;
+  text-transform: uppercase;
+}
+
+.uptime-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.uptime-total {
+  font-size: 12px;
+  color: #888;
+}
+
+.uptime-total span { color: #ccc; }
+
+@media (max-width: 500px) {
+  .stat-row { grid-template-columns: 1fr; }
+  .stat-cards { grid-template-columns: 1fr; }
+}
 `;
 
 export const navScript = `
@@ -178,3 +328,76 @@ fetch('/api/neko').then(r => r.json()).then(data => {
   img.src = data[0].url;
 }).catch(() => {});
 `;
+
+export const statusScript = `
+(function() {
+  if (window.statusInterval) clearInterval(window.statusInterval)
+
+  function formatTime(seconds) {
+    const days = Math.floor(seconds / 86400)
+    const hrs = Math.floor((seconds % 86400) / 3600)
+    const mins = Math.floor((seconds % 3600) / 60)
+    const secs = Math.floor(seconds % 60)
+
+    const parts = []
+    if (days > 0) parts.push(days + 'd')
+    if (hrs > 0 || days > 0) parts.push(hrs + 'h')
+    parts.push(mins + 'm')
+    parts.push(secs + 's')
+
+    return parts.join(' ')
+  }
+
+  async function update() {
+    const indicator = document.getElementById('status-indicator')
+    if (!indicator) {
+      clearInterval(window.statusInterval)
+      return
+    }
+
+    try {
+      const res = await fetch('/api/puter')
+      const data = await res.json()
+
+      const statusText = document.getElementById('status-text')
+      const cpuBar = document.getElementById('cpu-bar')
+      const cpuValue = document.getElementById('cpu-value')
+      const ramBar = document.getElementById('ram-bar')
+      const ramValue = document.getElementById('ram-value')
+      const uptimeValue = document.getElementById('uptime-value')
+      const totalUptimeValue = document.getElementById('total-uptime-value')
+
+      if (data.online) {
+        indicator.className = 'status-indicator online'
+        statusText.textContent = 'ONLINE'
+        statusText.className = 'status-text online'
+      } else {
+        indicator.className = 'status-indicator offline'
+        statusText.textContent = 'OFFLINE'
+        statusText.className = 'status-text offline'
+      }
+
+      const latest = data.graph[data.graph.length - 1] || { cpu: 0, ram: 0 }
+      cpuBar.style.width = Math.min(100, latest.cpu) + '%'
+      cpuValue.textContent = latest.cpu + '%'
+      ramBar.style.width = Math.min(100, latest.ram) + '%'
+      ramValue.textContent = latest.ram + '%'
+
+      if (data.online && data.uptimeStart > 0) {
+        const sessionTime = Math.floor(Date.now() / 1000) - data.uptimeStart
+        uptimeValue.textContent = formatTime(sessionTime)
+        totalUptimeValue.textContent = formatTime(data.totals.uptime + sessionTime)
+      } else {
+        uptimeValue.textContent = 'offline'
+        totalUptimeValue.textContent = formatTime(data.totals.uptime)
+      }
+    } catch (e) {
+      console.error('Failed to fetch status:', e)
+    }
+  }
+
+  update()
+  window.statusInterval = setInterval(update, 1000)
+})()
+`;
+
