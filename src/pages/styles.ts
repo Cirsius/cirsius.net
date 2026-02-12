@@ -308,8 +308,24 @@ li:hover .contact-label { color: #aaa; }
 }
 
 @media (max-width: 500px) {
+  body { padding: 12px; }
+  .container { padding: 16px; border-radius: 12px; }
+  .header { padding-bottom: 14px; margin-bottom: 20px; }
+  h1 { font-size: 22px; }
+  .nav {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-link { padding: 6px 12px; font-size: 13px; white-space: nowrap; }
+  .section { padding: 14px; }
+  .project { flex-direction: column; align-items: flex-start; gap: 4px; }
   .stat-row { grid-template-columns: 1fr; }
   .stat-cards { grid-template-columns: 1fr; }
+  .music-controls { bottom: 12px; left: 12px; }
+  .music-btn { width: 36px; height: 36px; }
 }
 `;
 
