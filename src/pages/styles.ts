@@ -20,9 +20,20 @@ body {
 }
 
 .header {
+  position: relative;
   border-bottom: 2px dashed #ffb3c633;
   padding-bottom: 20px;
   margin-bottom: 30px;
+}
+
+.avatar {
+  position: absolute;
+  top: 35%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
 }
 
 h1 {
@@ -324,6 +335,7 @@ li:hover .contact-label { color: #aaa; }
   .project { flex-direction: column; align-items: flex-start; gap: 4px; }
   .stat-row { grid-template-columns: 1fr; }
   .stat-cards { grid-template-columns: 1fr; }
+  .avatar { width: 40px; height: 40px; }
   .music-controls { bottom: 12px; left: 12px; }
   .music-btn { width: 36px; height: 36px; }
 }

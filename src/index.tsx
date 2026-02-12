@@ -32,6 +32,23 @@ app.get("/api/music", async (c) => {
   }
 })
 
+let avatar = { url: "", at: 0 }
+
+app.get("/api/avatar", async (c) => {
+  if (avatar.url && Date.now() - avatar.at < 3600000) return c.redirect(avatar.url)
+  try {
+    const res = await fetch("https://discord.com/api/v10/users/647943341865959457", {
+      headers: { Authorization: `Bot ${process.env.DISCORD_TOKEN}` },
+    })
+    const user = await res.json() as any
+    if (!user?.avatar) return new Response("not found", { status: 404 })
+    avatar = { url: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`, at: Date.now() }
+    return c.redirect(avatar.url)
+  } catch {
+    return new Response("error", { status: 500 })
+  }
+})
+
 app.get("/api/neko", async (c) => {
   try {
     const res = await fetch("https://api.nekosapi.com/v4/images/random?rating=safe&limit=1")

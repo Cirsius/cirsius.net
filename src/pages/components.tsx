@@ -123,6 +123,7 @@ export const Contact: FC = () => (
 export const Home: FC = () => (
   <Layout>
     <div class="header">
+      <img src="/api/avatar" alt="pfp" class="avatar" />
       <h1>cirsius</h1>
       <p class="tagline">jav/js dev</p>
     </div>
