@@ -92,12 +92,13 @@ li {
   border-bottom: 1px solid #1a1a1a;
   border-radius: 8px;
   margin-bottom: 4px;
+  transition: background 0.2s ease;
 }
 
 li:hover { background: #1a1a1a; }
 li:last-child { border-bottom: none; margin-bottom: 0; }
 
-a { color: #ffb3c6; text-decoration: none; }
+a { color: #ffb3c6; text-decoration: none; transition: color 0.2s ease; }
 a:hover { color: #fff; }
 
 .project {
@@ -108,10 +109,12 @@ a:hover { color: #fff; }
   flex-wrap: wrap;
 }
 
-.project-desc { font-size: 13px; color: #888; }
+.project-desc { font-size: 13px; color: #888; transition: color 0.2s ease; }
+li:hover .project-desc { color: #aaa; }
 
 .contact-item { display: flex; gap: 15px; }
-.contact-label { min-width: 80px; color: #888; }
+.contact-label { min-width: 80px; color: #888; transition: color 0.2s ease; }
+li:hover .contact-label { color: #aaa; }
 
 #ascii-bg {
   position: fixed;
@@ -271,133 +274,42 @@ a:hover { color: #fff; }
 
 .uptime-total span { color: #ccc; }
 
+.music-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 100;
+  display: flex;
+  gap: 8px;
+}
+
+.music-btn {
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.music-btn:hover {
+  color: #ffb3c6;
+  border-color: #ffb3c6;
+}
+
+.music-btn.playing {
+  color: #ffb3c6;
+  border-color: #ffb3c6;
+}
+
 @media (max-width: 500px) {
   .stat-row { grid-template-columns: 1fr; }
   .stat-cards { grid-template-columns: 1fr; }
 }
-`;
-
-export const navScript = `
-document.addEventListener('DOMContentLoaded', () => {
-  const slider = document.querySelector('.nav-slider');
-  const links = document.querySelectorAll('.nav-link');
-
-  const moveSlider = (link) => {
-    slider.style.width = link.offsetWidth + 'px';
-    slider.style.transform = \`translateX(\${link.offsetLeft - 4}px)\`;
-  };
-
-  moveSlider(document.querySelector('.nav-link.active'));
-
-  links.forEach((link) => {
-    link.addEventListener('click', () => {
-      links.forEach((l) => l.classList.remove('active'));
-      link.classList.add('active');
-      moveSlider(link);
-    });
-  });
-});
-`;
-
-export const asciiScript = `
-fetch('/api/neko').then(r => r.json()).then(data => {
-  if (!data[0]?.url) return;
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const width = 120;
-    const height = Math.floor(120 * img.height / img.width * 0.5);
-    canvas.width = width;
-    canvas.height = height;
-    ctx.drawImage(img, 0, 0, width, height);
-    const pixels = ctx.getImageData(0, 0, width, height).data;
-    const chars = ' .:-=+*#%@';
-    let output = '';
-    for (let y = 0; y < height; y++) {
-      for (let x = 0; x < width; x++) {
-        const i = (y * width + x) * 4;
-        const brightness = (pixels[i] + pixels[i+1] + pixels[i+2]) / 3;
-        output += chars[Math.floor(brightness / 255 * (chars.length - 1))];
-      }
-      output += '\\n';
-    }
-    document.getElementById('ascii-bg').textContent = output;
-  };
-  img.src = data[0].url;
-}).catch(() => {});
-`;
-
-export const statusScript = `
-(function() {
-  if (window.statusInterval) clearInterval(window.statusInterval)
-
-  function formatTime(seconds) {
-    const days = Math.floor(seconds / 86400)
-    const hrs = Math.floor((seconds % 86400) / 3600)
-    const mins = Math.floor((seconds % 3600) / 60)
-    const secs = Math.floor(seconds % 60)
-
-    const parts = []
-    if (days > 0) parts.push(days + 'd')
-    if (hrs > 0 || days > 0) parts.push(hrs + 'h')
-    parts.push(mins + 'm')
-    parts.push(secs + 's')
-
-    return parts.join(' ')
-  }
-
-  async function update() {
-    const indicator = document.getElementById('status-indicator')
-    if (!indicator) {
-      clearInterval(window.statusInterval)
-      return
-    }
-
-    try {
-      const res = await fetch('/api/puter')
-      const data = await res.json()
-
-      const statusText = document.getElementById('status-text')
-      const cpuBar = document.getElementById('cpu-bar')
-      const cpuValue = document.getElementById('cpu-value')
-      const ramBar = document.getElementById('ram-bar')
-      const ramValue = document.getElementById('ram-value')
-      const uptimeValue = document.getElementById('uptime-value')
-      const totalUptimeValue = document.getElementById('total-uptime-value')
-
-      if (data.online) {
-        indicator.className = 'status-indicator online'
-        statusText.textContent = 'ONLINE'
-        statusText.className = 'status-text online'
-      } else {
-        indicator.className = 'status-indicator offline'
-        statusText.textContent = 'OFFLINE'
-        statusText.className = 'status-text offline'
-      }
-
-      const latest = data.graph[data.graph.length - 1] || { cpu: 0, ram: 0 }
-      cpuBar.style.width = Math.min(100, latest.cpu) + '%'
-      cpuValue.textContent = latest.cpu + '%'
-      ramBar.style.width = Math.min(100, latest.ram) + '%'
-      ramValue.textContent = latest.ram + '%'
-
-      if (data.online && data.uptimeStart > 0) {
-        const sessionTime = Math.floor(Date.now() / 1000) - data.uptimeStart
-        uptimeValue.textContent = formatTime(sessionTime)
-        totalUptimeValue.textContent = formatTime(data.totals.uptime + sessionTime)
-      } else {
-        uptimeValue.textContent = 'offline'
-        totalUptimeValue.textContent = formatTime(data.totals.uptime)
-      }
-    } catch (e) {
-      console.error('Failed to fetch status:', e)
-    }
-  }
-
-  update()
-  window.statusInterval = setInterval(update, 1000)
-})()
 `;
 

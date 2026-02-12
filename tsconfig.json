@@ -4,6 +4,9 @@
     "skipLibCheck": true,
     "noEmit": true,
     "types": ["bun-types"],
+    "module": "nodenext",
+    "target": "esnext",
+    "moduleResolution": "nodenext",
     "jsx": "react-jsx",
     "jsxImportSource": "preact"
   }
