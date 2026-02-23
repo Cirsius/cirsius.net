@@ -15,6 +15,7 @@ const Layout: FC = ({ children }) => (
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>cirsius</title>
+      <link rel="icon" type="image/x-icon" href="/api/avatar"/>
       <script src="https://unpkg.com/htmx.org@1.9.10"></script>
       <style dangerouslySetInnerHTML={{ __html: css }}></style>
     </head>
