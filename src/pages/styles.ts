@@ -149,39 +149,6 @@ li:hover .contact-label { color: #aaa; }
 
 .back-link:hover { color: #ffb3c6; }
 
-.music-controls {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  z-index: 100;
-  display: flex;
-  gap: 8px;
-}
-
-.music-btn {
-  background: #111;
-  border: 1px solid #333;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #888;
-  transition: color 0.2s, border-color 0.2s;
-}
-
-.music-btn:hover {
-  color: #ffb3c6;
-  border-color: #ffb3c6;
-}
-
-.music-btn.playing {
-  color: #ffb3c6;
-  border-color: #ffb3c6;
-}
-
 @media (max-width: 500px) {
   body { padding: 12px; }
   .container { padding: 16px; border-radius: 12px; }
@@ -198,7 +165,5 @@ li:hover .contact-label { color: #aaa; }
   .section { padding: 14px; }
   .project { flex-direction: column; align-items: flex-start; gap: 4px; }
   .avatar { width: 40px; height: 40px; }
-  .music-controls { bottom: 12px; left: 12px; }
-  .music-btn { width: 36px; height: 36px; }
 }
 `;

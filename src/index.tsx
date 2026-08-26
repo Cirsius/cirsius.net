@@ -8,26 +8,6 @@ app.get("/about", (c) => c.html(render(<About />)))
 app.get("/projects", (c) => c.html(render(<Projects />)))
 app.get("/contact", (c) => c.html(render(<Contact />)))
 
-import { readdir } from "fs/promises"
-
-app.get("/music/:file", async (c) => {
-  const name = c.req.param("file")
-  if (!name.endsWith(".mp3")) return new Response("not found", { status: 404 })
-  const file = Bun.file(`./public/music/${name}`)
-  if (!(await file.exists())) return new Response("not found", { status: 404 })
-  return new Response(file, { headers: { "Content-Type": "audio/mpeg" } })
-})
-
-app.get("/api/music", async (c) => {
-  try {
-    const files = await readdir("./public/music")
-    const tracks = files.filter((f) => f.endsWith(".mp3")).map((f) => `/music/${f}`)
-    return c.json(tracks)
-  } catch {
-    return c.json([])
-  }
-})
-
 let avatar = { url: "", at: 0 }
 
 app.get("/api/avatar", async (c) => {
