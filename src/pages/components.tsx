@@ -1,11 +1,9 @@
-import type { FunctionalComponent, ComponentChildren } from "preact"
+import type { FC, PropsWithChildren } from "hono/jsx"
 import { readFileSync } from "fs"
 import { css } from "./styles"
 
 const navScript = readFileSync("src/pages/scripts/nav.js", "utf-8")
 const asciiScript = readFileSync("src/pages/scripts/ascii.js", "utf-8")
-
-type FC<T = {}> = FunctionalComponent<T & { children?: ComponentChildren }>
 
 const Layout: FC = ({ children }) => (
   <html lang="en">
@@ -14,7 +12,6 @@ const Layout: FC = ({ children }) => (
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>cirsius</title>
       <link rel="icon" type="image/x-icon" href="/api/avatar"/>
-      <script src="https://unpkg.com/htmx.org@1.9.10"></script>
       <style dangerouslySetInnerHTML={{ __html: css }}></style>
     </head>
     <body>
@@ -31,22 +28,22 @@ const Nav: FC = () => (
   <>
     <nav class="nav">
       <div class="nav-slider" />
-      <span class="nav-link active" hx-get="/about" hx-target="#content" hx-swap="innerHTML">about</span>
-      <span class="nav-link" hx-get="/projects" hx-target="#content" hx-swap="innerHTML">projects</span>
-      <span class="nav-link" hx-get="/contact" hx-target="#content" hx-swap="innerHTML">contact</span>
+      <button type="button" class="nav-link active" data-page="about">about</button>
+      <button type="button" class="nav-link" data-page="projects">projects</button>
+      <button type="button" class="nav-link" data-page="contact">contact</button>
     </nav>
     <script dangerouslySetInnerHTML={{ __html: navScript }}></script>
   </>
 )
 
-const Section: FC<{ title: string }> = ({ title, children }) => (
+const Section: FC<PropsWithChildren<{ title: string }>> = ({ title, children }) => (
   <div class="section">
     <div class="section-title">{title}</div>
     {children}
   </div>
 )
 
-export const About: FC = () => (
+const About: FC = () => (
   <Section title="about">
     <p>
       i run <a href="https://tuff.ws" target="_blank">mc server</a> and <a href="https://degloved.net" target="_blank">ubg site.</a> l sysadmin but w speed. ❤︎⁠ steins;gate and psychological anime.
@@ -54,7 +51,7 @@ export const About: FC = () => (
   </Section>
 )
 
-export const Projects: FC = () => (
+const Projects: FC = () => (
   <Section title="projects">
     <ul>
       <li>
@@ -73,7 +70,7 @@ export const Projects: FC = () => (
   </Section>
 )
 
-export const Contact: FC = () => (
+const Contact: FC = () => (
   <Section title="contact">
     <ul>
       <li>
@@ -94,14 +91,18 @@ export const Contact: FC = () => (
 
 export const Home: FC = () => (
   <Layout>
-    <div class="header">
+    <div class="masthead">
+      <div class="header">
+        <h1>cirsius</h1>
+        <p class="tagline">jav/js dev</p>
+      </div>
       <img src="/api/avatar" alt="pfp" class="avatar" />
-      <h1>cirsius</h1>
-      <p class="tagline">jav/js dev</p>
+      <Nav />
     </div>
-    <Nav />
     <div id="content" class="content">
-      <About />
+      <div data-page-content="about"><About /></div>
+      <div data-page-content="projects" hidden><Projects /></div>
+      <div data-page-content="contact" hidden><Contact /></div>
     </div>
   </Layout>
 )

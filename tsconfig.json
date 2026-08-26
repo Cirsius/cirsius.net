@@ -8,6 +8,6 @@
     "target": "esnext",
     "moduleResolution": "nodenext",
     "jsx": "react-jsx",
-    "jsxImportSource": "preact"
+    "jsxImportSource": "hono/jsx"
   }
 }

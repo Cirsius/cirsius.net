@@ -1,12 +1,8 @@
 import { Hono } from "hono"
-import render from "preact-render-to-string"
-import { Home, About, Projects, Contact } from "./pages"
+import { Home } from "./pages"
 const app = new Hono()
 
-app.get("/", (c) => c.html(render(<Home />)))
-app.get("/about", (c) => c.html(render(<About />)))
-app.get("/projects", (c) => c.html(render(<Projects />)))
-app.get("/contact", (c) => c.html(render(<Contact />)))
+app.get("/", (c) => c.html(<Home />))
 
 let avatar = { url: "", at: 0 }
 
