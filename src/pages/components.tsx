@@ -5,7 +5,6 @@ import { css } from "./styles"
 const navScript = readFileSync("src/pages/scripts/nav.js", "utf-8")
 const asciiScript = readFileSync("src/pages/scripts/ascii.js", "utf-8")
 const musicScript = readFileSync("src/pages/scripts/music.js", "utf-8")
-const statusScript = readFileSync("src/pages/scripts/status.js", "utf-8")
 
 type FC<T = {}> = FunctionalComponent<T & { children?: ComponentChildren }>
 
@@ -62,7 +61,6 @@ const Nav: FC = () => (
       <span class="nav-link active" hx-get="/about" hx-target="#content" hx-swap="innerHTML">about</span>
       <span class="nav-link" hx-get="/projects" hx-target="#content" hx-swap="innerHTML">projects</span>
       <span class="nav-link" hx-get="/contact" hx-target="#content" hx-swap="innerHTML">contact</span>
-      <span class="nav-link" hx-get="/status" hx-target="#content" hx-swap="innerHTML">status</span>
     </nav>
     <script dangerouslySetInnerHTML={{ __html: navScript }}></script>
   </>
@@ -133,54 +131,5 @@ export const Home: FC = () => (
       <About />
     </div>
   </Layout>
-)
-
-export const Status: FC = () => (
-  <>
-    <Section title="computer">
-      <div class="status-header">
-        <div class="status-indicator-wrapper">
-          <div id="status-indicator" class="status-indicator offline" />
-        </div>
-        <span id="status-text" class="status-text offline">OFFLINE</span>
-      </div>
-
-      <div class="stat-row">
-        <div class="stat-item">
-          <div class="stat-header">
-            <span class="stat-label">CPU</span>
-            <span id="cpu-value" class="stat-value cpu">0%</span>
-          </div>
-          <div class="progress-bar">
-            <div id="cpu-bar" class="progress-fill cpu" style="width: 0%" />
-          </div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-header">
-            <span class="stat-label">RAM</span>
-            <span id="ram-value" class="stat-value ram">0%</span>
-          </div>
-          <div class="progress-bar">
-            <div id="ram-bar" class="progress-fill ram" style="width: 0%" />
-          </div>
-        </div>
-      </div>
-
-      <div class="uptime-card">
-        <div class="uptime-header">
-          <svg width="16" height="16" viewBox="0 0 20 20" fill-rule="evenodd" class="uptime-icon">
-            <path d="M10 5.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11M2.5 11a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0" />
-            <path d="M2.793 3.793a1 1 0 0 1 1.414 0l1.5 1.5c.91.943-.471 2.324-1.414 1.414l-1.5-1.5a1 1 0 0 1 0-1.414m11.5 2.914a1 1 0 0 0 1.414 0l1.5-1.5c.91-.943-.471-2.324-1.414-1.414l-1.5 1.5a1 1 0 0 0 0 1.414M9 4V2h2v2z" />
-            <path d="M7.5 2a1 1 0 0 1 1-1h3a1 1 0 1 1 0 2h-3a1 1 0 0 1-1-1" />
-            <path id="stopwatch-hand" d="m 13.28,8.375 c 0.345578,0.4310223 0.276171,1.0606079 -0.155,1.406 l -2.5,2 C 9.583667,12.614333 8.333667,11.052333 9.375,10.219 l 2.5,-2 c 0.431286,-0.3453463 1.060907,-0.2754879 1.406,0.156" />
-          </svg>
-          <span class="uptime-label">uptime</span>
-        </div>
-        <div id="uptime-value" class="uptime-value">offline</div>
-        <div class="uptime-total">total: <span id="total-uptime-value">0m 0s</span></div>
-      </div>
-    </Section>
-    <script dangerouslySetInnerHTML={{ __html: statusScript }}></script>
-  </>
 )
 

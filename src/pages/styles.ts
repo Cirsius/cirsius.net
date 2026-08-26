@@ -149,142 +149,6 @@ li:hover .contact-label { color: #aaa; }
 
 .back-link:hover { color: #ffb3c6; }
 
-.status-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.status-indicator-wrapper { position: relative; }
-
-.status-indicator {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  transition: background-color 0.3s;
-}
-
-.status-indicator.online { background: #4ade80; }
-.status-indicator.offline { background: #f87171; }
-
-.status-text {
-  font-weight: bold;
-  font-size: 14px;
-  transition: color 0.3s;
-}
-
-.status-text.online { color: #4ade80; }
-.status-text.offline { color: #f87171; }
-
-.stat-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.stat-item { flex: 1; }
-
-.stat-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
-
-.stat-label {
-  font-size: 12px;
-  font-weight: bold;
-  color: #888;
-}
-
-.stat-value {
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.stat-value.cpu { color: #fb923c; }
-.stat-value.ram { color: #facc15; }
-
-.progress-bar {
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 0.3s ease;
-}
-
-.progress-fill.cpu { background: #fb923c; }
-.progress-fill.ram { background: #facc15; }
-
-.stat-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.stat-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 12px;
-}
-
-.stat-card-label {
-  font-size: 11px;
-  font-weight: bold;
-  color: #888;
-  margin-bottom: 4px;
-}
-
-.stat-card-value {
-  font-size: 16px;
-  font-weight: bold;
-  color: #fff;
-}
-
-.uptime-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 12px;
-}
-
-.uptime-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-}
-
-.uptime-icon { fill: #888; }
-
-.uptime-label {
-  font-size: 11px;
-  font-weight: bold;
-  color: #888;
-  text-transform: uppercase;
-}
-
-.uptime-value {
-  font-size: 18px;
-  font-weight: bold;
-  color: #fff;
-  margin-bottom: 4px;
-}
-
-.uptime-total {
-  font-size: 12px;
-  color: #888;
-}
-
-.uptime-total span { color: #ccc; }
-
 .music-controls {
   position: fixed;
   bottom: 20px;
@@ -333,11 +197,8 @@ li:hover .contact-label { color: #aaa; }
   .nav-link { padding: 6px 12px; font-size: 13px; white-space: nowrap; }
   .section { padding: 14px; }
   .project { flex-direction: column; align-items: flex-start; gap: 4px; }
-  .stat-row { grid-template-columns: 1fr; }
-  .stat-cards { grid-template-columns: 1fr; }
   .avatar { width: 40px; height: 40px; }
   .music-controls { bottom: 12px; left: 12px; }
   .music-btn { width: 36px; height: 36px; }
 }
 `;
-
