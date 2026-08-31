@@ -2,6 +2,12 @@ import { Hono } from "hono"
 import { Home } from "./pages"
 const app = new Hono()
 
+type GitHubRepo = {
+  name: string
+  html_url: string
+  description: string | null
+}
+
 app.get("/", (c) => c.html(<Home />))
 
 let avatar = { url: "", at: 0 }
@@ -18,6 +24,18 @@ app.get("/api/avatar", async (c) => {
     return c.redirect(avatar.url)
   } catch {
     return new Response("error", { status: 500 })
+  }
+})
+
+app.get("/api/projects", async (c) => {
+  try {
+    const res = await fetch("https://api.github.com/users/Cirsius/repos?per_page=100&sort=pushed")
+    if (!res.ok) return c.json([], 500)
+
+    const repos = await res.json() as GitHubRepo[]
+    return c.json(repos.map(({ name, html_url, description }) => ({ name, url: html_url, description })))
+  } catch {
+    return c.json([], 500)
   }
 })
 

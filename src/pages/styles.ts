@@ -122,7 +122,8 @@ h1 {
 .nav-link.active { color: #000; }
 .nav-link:hover:not(.active) { color: #ffe4ec; }
 
-.content { min-height: 200px; }
+.content { height: 200px; }
+[data-page-content="projects"] { height: 100%; }
 
 ul { list-style: none; }
 
@@ -139,6 +140,28 @@ li:last-child { margin-bottom: 0; }
 
 a { color: #ffb3c6; text-decoration: none; transition: color 0.2s ease; }
 a:hover { color: #ffe4ec; }
+
+.projects-section {
+  height: 100%;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#projects-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 2px 10px 6px 2px;
+  scrollbar-width: thin;
+  scrollbar-color: #ffb3c6 #12090d;
+}
+
+#projects-list::-webkit-scrollbar { width: 9px; }
+#projects-list::-webkit-scrollbar-track { background: #12090d; border-radius: 8px; }
+#projects-list::-webkit-scrollbar-thumb { background: #ffb3c6; border: 2px solid #12090d; border-radius: 8px; }
+#projects-list::-webkit-scrollbar-thumb:hover { background: #ffe4ec; }
 
 .project {
   display: flex;

@@ -4,6 +4,7 @@ import { css } from "./styles"
 
 const navScript = readFileSync("src/pages/scripts/nav.js", "utf-8")
 const asciiScript = readFileSync("src/pages/scripts/ascii.js", "utf-8")
+const projectsScript = readFileSync("src/pages/scripts/projects.js", "utf-8")
 
 const Layout: FC = ({ children }) => (
   <html lang="en">
@@ -52,22 +53,13 @@ const About: FC = () => (
 )
 
 const Projects: FC = () => (
-  <Section title="projects">
-    <ul>
-      <li>
-        <div class="project">
-          <span class="project-name"><a href="https://github.com/cirsius/wispbot" target="_blank">wispbot</a></span>
-          <span class="project-desc">discord bot for wisp server registry</span>
-        </div>
-      </li>
-      <li>
-        <div class="project">
-          <span class="project-name"><a href="https://github.com/cirsius/wispmotd" target="_blank">wispmotd</a></span>
-          <span class="project-desc">queries mc servers through wisp proxies</span>
-        </div>
-      </li>
+  <div class="section projects-section">
+    <div class="section-title">projects</div>
+    <ul id="projects-list">
+      <li>loading repos...</li>
     </ul>
-  </Section>
+    <script dangerouslySetInnerHTML={{ __html: projectsScript }}></script>
+  </div>
 )
 
 const Contact: FC = () => (
